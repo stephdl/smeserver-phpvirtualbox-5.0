@@ -1,0 +1,8 @@
+{
+        my $PVBwebauth = $DB->get_prop('phpvirtualbox', 'webauth') or return;
+        if ($PVBwebauth eq 'disabled')
+        {
+          $DB->set_prop('phpvirtualbox',"webauth", "enabled" );
+        }
+}
+

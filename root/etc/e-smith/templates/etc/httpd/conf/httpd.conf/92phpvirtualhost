@@ -1,0 +1,49 @@
+{
+    my $status = $phpvirtualbox{'status'} || "disabled";
+    return "    # phpvirtualbox is disabled in this VirtualHost"
+            unless $status eq 'enabled';
+
+    $OUT = "";
+      my $satisfy = 'all';
+      my $name = $phpvirtualbox{'Name'} || 'phpvirtualbox';
+    my @phpvuser = split(",", ($phpvirtualbox{'User'} || "") );
+    my @phpvgroup = split(",", ($phpvirtualbox{'Group'} || "") );
+    
+      $OUT .= "#------------------------------------------------------------\n";
+      $OUT .= "# phpvirtualbox - $name\n";
+      $OUT .= "#------------------------------------------------------------\n";
+
+      {
+        if ((exists $phpvirtualbox{'URL'}) && ($phpvirtualbox{'URL'} ne ''))
+        { $OUT .= "Alias  /$phpvirtualbox{'URL'}  /opt/phpvirtualbox\n"; }
+      }
+    { 
+      $OUT .= "Alias  /phpvirtualbox  /opt/phpvirtualbox\n";
+      
+      $OUT .= "\n";
+      $OUT .= "<Directory /opt/phpvirtualbox>\n";
+      $OUT .= "    SSLRequireSSL\n";
+      $OUT .= "    order deny,allow\n";
+      $OUT .= "    deny from all\n";
+      $OUT .= "    allow from $localAccess\n";
+      $OUT .= "    php_admin_value upload_tmp_dir /tmp\n";
+
+     if ($phpvirtualbox{'webauth'} eq 'enabled')
+          {
+          $OUT .= "    AuthName \"$name\"\n";
+          $OUT .= "    AuthBasicProvider external\n";
+          $OUT .= "    AuthType Basic\n";
+          $OUT .= "    AuthExternal pwauth\n";
+          $OUT .= "    GroupExternal ugroup\n";
+          $OUT .= "    AuthzUserAuthoritative off\n";
+          $OUT .= "    require user admin @phpvuser\n";
+          $OUT .= "    require group @phpvgroup\n";
+          $OUT .= "    Satisfy $satisfy\n";
+          }
+      $OUT .= "    AddType application/x-httpd-php .php\n";
+      $OUT .= "    php_admin_value open_basedir /opt/phpvirtualbox\n";
+      $OUT .= "    php_admin_value eaccelerator.enable 1\n";
+      $OUT .= "</Directory>\n";
+    }
+}
+
