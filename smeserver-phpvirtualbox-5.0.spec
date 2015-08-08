@@ -20,7 +20,7 @@ BuildArchitectures: noarch
 BuildRequires: e-smith-devtools
 Requires: e-smith-release >= 8.0
 Requires: php-soap
-Requires: phpvirtualbox >= 5.0
+Requires: phpvirtualbox-5.0
 
 AutoReqProv: no
 %description
