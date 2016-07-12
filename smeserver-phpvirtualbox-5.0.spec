@@ -1,6 +1,6 @@
 %define name smeserver-phpvirtualbox-5.0
 %define version 5.0.0
-%define release 1
+%define release 2
 %define rpmver   5.0.0
 Summary: smserver rpm to install phpvirtualbox
 Name: %{name}
@@ -29,6 +29,9 @@ modern web interface, it allows you to access and control remote VirtualBox inst
 administer VirtualBox in a headless environment - mirroring the VirtualBox GUI through its web interface.
 
 %changelog
+* Tue Jul 12 2016 stephane de labrusse <stephdl@de-labrusse.fr> 5.0.0-2
+- change path of unixgroup to /usr/bin
+
 * Thu Aug 06 2015 stephane de labrusse <stephdl@de-labrusse.fr> 5.0.0-1
 - require to phpvirtualbox-5.0
 
@@ -71,7 +74,9 @@ administer VirtualBox in a headless environment - mirroring the VirtualBox GUI t
 rm -rf $RPM_BUILD_ROOT
 (cd root   ; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
 rm -f %{name}-%{version}-filelist
-/sbin/e-smith/genfilelist $RPM_BUILD_ROOT > %{name}-%{version}-filelist
+/sbin/e-smith/genfilelist \
+   --file /usr/bin/unixgroup 'attr(0750,root,www)' \
+$RPM_BUILD_ROOT > %{name}-%{version}-filelist
 echo "%doc COPYING"  >> %{name}-%{version}-filelist
 
 %clean
