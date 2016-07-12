@@ -31,7 +31,6 @@
      if ($phpvirtualbox{'webauth'} eq 'enabled')
           {
           $OUT .= "    AuthName \"$name\"\n";
-          $OUT .= "    AuthBasicProvider external\n";
           $OUT .= "    AuthType Basic\n";
           $OUT .= "    AuthExternal pwauth\n";
           $OUT .= "    GroupExternal ugroup\n";
